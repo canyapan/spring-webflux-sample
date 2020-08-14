@@ -17,8 +17,8 @@ public class MyNonBlockingEchoController {
     private final EchoService echoService;
 
     @GetMapping("/{message}")
-    public ResponseEntity<Mono<String>> getEcho(@PathVariable final String message) {
-        return ResponseEntity.ok(echoService.echo(message));
+    public Mono<String> getEcho(@PathVariable final String message) {
+        return echoService.echo(message);
     }
 
 }

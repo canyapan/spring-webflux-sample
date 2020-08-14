@@ -32,9 +32,7 @@ class MyNonBlockingEchoControllerTest {
         when(echoService.echo(eq(message)))
                 .thenReturn(Mono.just(message));
 
-        final ResponseEntity<Mono<String>> response = controller.getEcho(message);
-        assertEquals(HttpStatus.OK, response.getStatusCode(), "response status should be HTTP OK 200");
-        assertNotNull(response.getBody(), "response should be not null");
-        assertEquals(message, response.getBody().block(), "response should match with the input");
+        final Mono<String> response = controller.getEcho(message);
+        assertEquals(message, response.block(), "response should match with the input");
     }
 }
