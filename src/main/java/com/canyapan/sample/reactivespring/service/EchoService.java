@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class EchoService {
 
-    public Mono<String> echo(String message) {
+    public Mono<String> echo(final String message) {
         return Mono.just(message);
     }
 }

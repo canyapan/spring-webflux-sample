@@ -19,7 +19,7 @@ class MyNonBlockingEchoControllerIntegrationTest {
         final String message = "brown fox jumped over the lazy dog";
 
         webTestClient.get()
-                .uri("/api/v1/echo/{message}", message)
+                .uri("/api/v1/echo/{message}", message) // Auto URL encoding happens here!!
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class).isEqualTo(message);

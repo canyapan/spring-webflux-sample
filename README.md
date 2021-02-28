@@ -12,3 +12,7 @@ A simple echo rest API as an example of how to implement a non-blocking rest API
 
 ## Package
 `./gradlew bootJar`
+
+# Starting MongoDB on docker
+`cd docker-mongodb`
+`docker-compose up`
