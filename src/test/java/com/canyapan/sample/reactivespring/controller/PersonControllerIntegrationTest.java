@@ -12,9 +12,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,20 +31,21 @@ class PersonControllerIntegrationTest {
     private PersonService mockPersonService;
 
     @Test
-    void shouldReturnAllPersons() throws Exception {
+    void shouldReturnAllPersons() {
+        final List<Person> personList = Arrays.asList(
+                Person.builder()
+                        .id(UUID.randomUUID().toString())
+                        .firstName("John")
+                        .lastName("Doe")
+                        .build(),
+                Person.builder()
+                        .id(UUID.randomUUID().toString())
+                        .firstName("Jane")
+                        .lastName("Doe")
+                        .build());
+
         when(mockPersonService.findAll())
-                .thenReturn(Flux.just(
-                        Person.builder()
-                                .id(UUID.randomUUID().toString())
-                                .firstName("John")
-                                .lastName("Doe")
-                                .build(),
-                        Person.builder()
-                                .id(UUID.randomUUID().toString())
-                                .firstName("Jane")
-                                .lastName("Doe")
-                                .build()
-                ));
+                .thenReturn(Flux.fromIterable(personList));
 
         webTestClient.get()
                 .uri("/api/v1/persons/") // Auto URL encoding happens here!!
@@ -49,13 +53,13 @@ class PersonControllerIntegrationTest {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
-                .jsonPath("$", hasSize(2)).isArray()
-                .jsonPath("$.[0].id").value(is(not(emptyString())))
-                .jsonPath("$.[0].firstName").value(is("John"))
-                .jsonPath("$.[0].lastName").value(is("Doe"))
-                .jsonPath("$.[1].id").value(is(not(emptyString())))
-                .jsonPath("$.[1].firstName").value(is("Jane"))
-                .jsonPath("$.[1].lastName").value(is("Doe"));
+                .jsonPath("$", hasSize(personList.size())).isArray()
+                .jsonPath("$.[0].id").value(is(personList.get(0).getId()))
+                .jsonPath("$.[0].firstName").value(is(personList.get(0).getFirstName()))
+                .jsonPath("$.[0].lastName").value(is(personList.get(0).getLastName()))
+                .jsonPath("$.[1].id").value(is(personList.get(1).getId()))
+                .jsonPath("$.[1].firstName").value(is(personList.get(1).getFirstName()))
+                .jsonPath("$.[1].lastName").value(is(personList.get(1).getLastName()));
     }
 
 }
