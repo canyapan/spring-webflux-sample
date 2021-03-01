@@ -11,7 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +33,9 @@ class MyNonBlockingEchoControllerTest {
         when(echoService.echo(eq(message)))
                 .thenReturn(Mono.just(message));
 
-        final Mono<String> response = controller.getEcho(message);
-        assertEquals(message, response.block(), "response should match with the input");
+        final ResponseEntity<String> response = controller.getEcho(message).block();
+        assertNotNull(response, "response cannot be null");
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "response status should be HTTP 200 (OK)");
+        assertEquals(message, response.getBody(), "response message should match with the input");
     }
 }
