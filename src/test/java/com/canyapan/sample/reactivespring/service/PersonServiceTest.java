@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -75,6 +76,8 @@ class PersonServiceTest {
         assertEquals(expectedId, newPerson.getId(), "found person's id should match");
         assertEquals(expectedFirstName, newPerson.getFirstName(), "found person's first name should match");
         assertEquals(expectedLastName, newPerson.getLastName(), "found person'slast name should match");
+
+        verify(mockPersonRepo).deleteById(eq(expectedId));
     }
 
     @Test

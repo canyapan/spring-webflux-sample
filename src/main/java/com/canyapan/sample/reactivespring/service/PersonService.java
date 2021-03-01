@@ -21,7 +21,7 @@ public class PersonService {
     public Mono<Person> delete(final String id) {
         return personRepo.findById(id)
                 .switchIfEmpty(Mono.error(new NotFoundException("Person not found")))
-                .doOnEach(p -> personRepo.deleteById(id));
+                .doOnSuccess(p -> personRepo.deleteById(p.getId()));
     }
 
     public Flux<Person> findAll() {

@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "person")
+@Document(collection = "persons")
 @CompoundIndex(def = "{'firstName': 1,'lastName': 1}")
 public class Person {
     @Id
