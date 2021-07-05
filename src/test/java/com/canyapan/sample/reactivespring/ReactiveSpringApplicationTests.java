@@ -10,4 +10,9 @@ class ReactiveSpringApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void shouldStartApp() {
+		ReactiveSpringApplication.main(new String[] {"--spring.profiles.active=test", "--server.port=0"});
+	}
+
 }
